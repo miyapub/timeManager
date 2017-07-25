@@ -104,9 +104,18 @@ public class MainActivity extends AppCompatActivity {
         //填充数据
         data.add(item);
 
-        Collections.reverse(data);//倒叙 内容反转
+        //克隆一个 倒序排列的 list
+        List<Map<String, Object>> data_list = new ArrayList<Map<String, Object>>(); //时间的列表
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, data,
+        for(int i=0; i<data.size(); i++) {
+            Map<String, Object> it = data.get(i);
+            data_list.add(it);
+        }
+        Collections.reverse(data_list);//倒叙 内容反转
+
+
+
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, data_list,
         R.layout.item, new String[] { "TimeLong", "startTime","endTime","activeTag" },
         new int[] { R.id.TimeLong, R.id.startTime,R.id.endTime,R.id.activeTag });
         list.setAdapter(simpleAdapter);
