@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         //mTextMessage = (TextView) findViewById(R.id.message);
         bindNav();//绑定底部的菜单栏
 
-        render_list();
+        render_list();//渲染列表页
 
         //
     }
@@ -105,17 +105,16 @@ public class MainActivity extends AppCompatActivity {
     public void Button_endTime_Click(View view) throws ParseException {
         doing=false;//计时状态结束
         endTime=getTimestamp();//设置结束的时间戳
+        baseTime=0;//恢复初始化
         activeTag=((EditText)findViewById(R.id.activeTag)).getText().toString();
 
         hide_soft_input(view);//强制隐藏键盘
 
-        Chronometer timer = (Chronometer) findViewById(R.id.timer);
-        long mRecordTime = SystemClock.elapsedRealtime();
+        //Chronometer timer = (Chronometer) findViewById(R.id.timer);
+        //long mRecordTime = SystemClock.elapsedRealtime();
 
         setContentView(R.layout.activity_list);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bindNav();
 
         String starttime=getFormatTime(startTime);
         String endtime=getFormatTime(endTime);
@@ -136,7 +135,32 @@ public class MainActivity extends AppCompatActivity {
 
         //yy/1000/60/60/24:相差多少天
         //
-        item.put("TimeLong",TimeLong/1000/60/60+"h "+TimeLong/1000/60+"m "+TimeLong/1000+"s");
+
+        long h=TimeLong/1000/60/60;
+        long m=TimeLong/1000/60;
+        long s=TimeLong/1000;
+
+        String hh="";
+        if(h<10){
+            hh="0"+h;
+        }else{
+            hh=""+h;
+        }
+
+        String mm="";
+        if(h<10){
+            mm="0"+m;
+        }else{
+            mm=""+m;
+        }
+        String ss="";
+        if(s<10){
+            ss="0"+s;
+        }else{
+            ss=""+s;
+        }
+
+        item.put("TimeLong",hh+"h "+mm+"m "+ss+"s");
         item.put("startTime",starttime);
         item.put("endTime",endtime);
         item.put("activeTag",activeTag);
@@ -145,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
         //填充数据
         data.add(item);
 
+        //存储到 手机里 xml
         //数据操作结束
 
         render_list();
@@ -195,6 +220,8 @@ public class MainActivity extends AppCompatActivity {
         //渲染 list
         //克隆一个 倒序排列的 list
         List<Map<String, Object>> data_list = new ArrayList<Map<String, Object>>(); //时间的列表
+
+
 
         for(int i=0; i<data.size(); i++) {
             Map<String, Object> it = data.get(i);
