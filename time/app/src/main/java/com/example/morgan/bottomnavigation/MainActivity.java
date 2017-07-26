@@ -32,50 +32,37 @@ public class MainActivity extends AppCompatActivity {
     public long endTime=0;//结束时间
     public String activeTag="";//行为标签
     public boolean doing=false;//默认 没有在计时
+    public long baseTime=0;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            BottomNavigationView navigation;
             switch (item.getItemId()) {
                 case R.id.navigation_list:
                     setContentView(R.layout.activity_list);
-                    navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-                    //
-                    render_list();
-
+                    bindNav();//绑定底部菜单nav
+                    render_list();//渲染列表
                     return true;
                 case R.id.navigation_start:
                     if(doing){
                         //正在计时页面
                         setContentView(R.layout.activity_doing);
-
                         //恢复数据
                         EditText activeTagInput=(EditText)findViewById(R.id.activeTag);
                         activeTagInput.setText(activeTag);
-                        Chronometer timer = (Chronometer) findViewById(R.id.timer);
-                        //timer.setBase(System.currentTimeMillis()-startTime);//计时器清零
-                        //timer.setBase(System.currentTimeMillis()-startTime);//计时器清零
-                        int hour = (int) ((SystemClock.elapsedRealtime() - timer.getBase()) / 1000 / 60);
-                        timer.setFormat("0"+String.valueOf(hour)+":%s");
-                        timer.start();
+                        time_start();
 
                     }else{
                         //开始计时页面
                         setContentView(R.layout.activity_start);
                     }
 
-                    navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                    bindNav();
                     return true;
                 case R.id.navigation_about:
                     setContentView(R.layout.activity_about);
-                    navigation = (BottomNavigationView) findViewById(R.id.navigation);
-                    navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                    bindNav();
                     return true;
             }
             return false;
@@ -90,8 +77,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
 
         //mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bindNav();//绑定底部的菜单栏
 
         render_list();
 
@@ -104,10 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button btn=(Button)findViewById(R.id.startTimeButton);
 
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //boolean isOpen=imm.isActive();//isOpen若返回true，则表示输入法打开
-        //imm.showSoftInput(view,InputMethodManager.SHOW_FORCED);//强制显示键盘
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+
+        hide_soft_input(view);//强制隐藏键盘
 
         activeTag=((EditText)findViewById(R.id.activeTag)).getText().toString();
         setContentView(R.layout.activity_doing);
@@ -116,23 +100,14 @@ public class MainActivity extends AppCompatActivity {
 
         EditText activeTagInput=(EditText)findViewById(R.id.activeTag);
         activeTagInput.setText(activeTag);
-
-        Chronometer timer = (Chronometer) findViewById(R.id.timer);
-        timer.setBase(SystemClock.elapsedRealtime());//计时器清零
-        //timer.setBase();//计时器清零
-
-        int hour = (int) ((SystemClock.elapsedRealtime() - timer.getBase()) / 1000 / 60);
-        timer.setFormat("0"+String.valueOf(hour)+":%s");
-        timer.start();
+        time_start();
     }
     public void Button_endTime_Click(View view) throws ParseException {
         doing=false;//计时状态结束
         endTime=getTimestamp();//设置结束的时间戳
         activeTag=((EditText)findViewById(R.id.activeTag)).getText().toString();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        //boolean isOpen=imm.isActive();//isOpen若返回true，则表示输入法打开
-        //imm.showSoftInput(view,InputMethodManager.SHOW_FORCED);//强制显示键盘
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+
+        hide_soft_input(view);//强制隐藏键盘
 
         Chronometer timer = (Chronometer) findViewById(R.id.timer);
         long mRecordTime = SystemClock.elapsedRealtime();
@@ -238,4 +213,27 @@ public class MainActivity extends AppCompatActivity {
         //
     }
 
+    public void bindNav(){
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+    public void time_start(){
+        Chronometer timer = (Chronometer) findViewById(R.id.timer);
+        if(baseTime==0){
+            baseTime=SystemClock.elapsedRealtime();
+        }
+        timer.setBase(baseTime);//计时器清零
+        //timer.setBase(System.currentTimeMillis());//计时器清零
+        int hour = (int) ((SystemClock.elapsedRealtime()-baseTime) / 1000 / 60);
+        timer.setFormat("0"+String.valueOf(hour)+":%s");
+        //timer.setFormat(hour+"(%s)");
+        timer.start();
+    }
+
+    public void hide_soft_input(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //boolean isOpen=imm.isActive();//isOpen若返回true，则表示输入法打开
+        //imm.showSoftInput(view,InputMethodManager.SHOW_FORCED);//强制显示键盘
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
+    }
 }
