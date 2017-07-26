@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">时间管理</string>
+    <string name="title_home">主页</string>
+    <string name="title_dashboard">操作</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_about">关于</string>
+    <string name="title_start">计时</string>
+    <string name="title_list">列表</string>
+    <string name="content_about">这个时间管理app是基于柳比歇夫时间理念来制作的。\n\n我是米衙,有问题，欢迎加我微信：miyapub\n或去新浪微博私信我 @米衙</string>
+</resources>
