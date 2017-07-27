@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
         long m=TimeLong/1000/60;
         long s=TimeLong/1000;
 
+
         String hh="";
         if(h<10){
             hh="0"+h;
@@ -148,12 +149,33 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String mm="";
+
+        while(m>60){
+            m-=60;
+        }
+
+        if(m==60){
+            m=0;
+        }
+
         if(h<10){
             mm="0"+m;
         }else{
             mm=""+m;
         }
+
+
+
         String ss="";
+
+        while(s>60){
+            s-=60;
+        }
+
+        if(s==60){
+            s=0;
+        }
+
         if(s<10){
             ss="0"+s;
         }else{
