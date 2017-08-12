@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="10dp"
     tools:context="com.example.morgan.bottomnavigation.MainActivity">
 
     <FrameLayout
@@ -17,18 +18,16 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
             android:animateLayoutChanges="true"
-            >
+            android:orientation="vertical">
 
             <Chronometer
+                android:id="@+id/timer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:format="00:00:00"
                 android:gravity="center"
-                android:textSize="50dp"
-                android:id="@+id/timer"/>
+                android:textSize="50dp" />
 
             <EditText
                 android:id="@+id/activeTag"

@@ -14,7 +14,7 @@
             android:id="@+id/TimeLong"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.12"
+            android:layout_weight="0.27"
             android:background="#1a94ec"
             android:lineSpacingExtra="5dp"
             android:padding="5dp"

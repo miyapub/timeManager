@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_list:
                     setContentView(R.layout.activity_list);
                     bindNav();//绑定底部菜单nav
+                    Json json=new Json();
+                    data.clear();
+                    data=json.getInfo(getBaseContext(),"list");
                     render_list();//渲染列表
                     return true;
                 case R.id.navigation_start:
@@ -63,6 +66,15 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_about:
                     setContentView(R.layout.activity_about);
                     bindNav();
+                    Button btn=(Button)findViewById(R.id.clearAllBtn);
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            data.clear();
+                            Json json=new Json();
+                            json.saveInfo(getBaseContext(),"list",data);
+                        }
+                    });
                     return true;
             }
             return false;
@@ -78,7 +90,9 @@ public class MainActivity extends AppCompatActivity {
 
         //mTextMessage = (TextView) findViewById(R.id.message);
         bindNav();//绑定底部的菜单栏
-
+        Json json=new Json();
+        data.clear();
+        data=json.getInfo(getBaseContext(),"list");
         render_list();//渲染列表页
 
         //
@@ -158,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             m=0;
         }
 
-        if(h<10){
+        if(m<10){
             mm="0"+m;
         }else{
             mm=""+m;
@@ -182,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
             ss=""+s;
         }
 
-        item.put("TimeLong",hh+"h "+mm+"m "+ss+"s");
+        item.put("TimeLong",hh+"时 "+mm+"分 "+ss+"秒");
         item.put("startTime",starttime);
         item.put("endTime",endtime);
         item.put("activeTag",activeTag);
@@ -190,6 +204,8 @@ public class MainActivity extends AppCompatActivity {
 
         //填充数据
         data.add(item);
+        Json json=new Json();
+        json.saveInfo(getBaseContext(),"list",data);
 
         //存储到 手机里 xml
         //数据操作结束
